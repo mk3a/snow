@@ -1,0 +1,11 @@
+{
+  "name": "c_editor",
+  "version": "1.0.0",
+  "description": "A C code editor that supports syntax highlighting, keyboard shortcuts and other editor features.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mohammed Khairul Islam",
+  "license": "MIT"
+}
