@@ -12,7 +12,6 @@ var greet = function () {
 
 // Simple wrapper exposing environment variables to rest of the code.
 
-// The variables have been written to `env.json` by the build process.
 var env = jetpack.cwd(__dirname).read('env.json', 'json');
 
 // Here is the starting point for your application code.

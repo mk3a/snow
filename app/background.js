@@ -6,6 +6,7 @@ var path = _interopDefault(require('path'));
 var url = _interopDefault(require('url'));
 var electron = require('electron');
 var jetpack = _interopDefault(require('fs-jetpack'));
+var electronVibrancy = _interopDefault(require('electron-vibrancy'));
 
 var devMenuTemplate = {
     label: 'Development',
@@ -128,7 +129,6 @@ var createWindow = function (name, options) {
 
 // Simple wrapper exposing environment variables to rest of the code.
 
-// The variables have been written to `env.json` by the build process.
 var env = jetpack.cwd(__dirname).read('env.json', 'json');
 
 // This is main process of Electron, started as first thing when your
@@ -136,47 +136,48 @@ var env = jetpack.cwd(__dirname).read('env.json', 'json');
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-// Special module holding environment variables which you declared
-// in config/env_xxx.json file.
 var setApplicationMenu = function () {
-    var menus = [editMenuTemplate];
-    if (env.name !== 'production') {
-        menus.push(devMenuTemplate);
-    }
-    electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(menus));
+	var menus = [editMenuTemplate];
+	if (env.name !== 'production') {
+		menus.push(devMenuTemplate);
+	}
+	electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(menus));
 };
 
 // Save userData in separate folders for each environment.
 // Thanks to this you can use production and development versions of the app
 // on same machine like those are two separate apps.
 if (env.name !== 'production') {
-    var userDataPath = electron.app.getPath('userData');
-    electron.app.setPath('userData', userDataPath + ' (' + env.name + ')');
+	var userDataPath = electron.app.getPath('userData');
+	electron.app.setPath('userData', userDataPath + ' (' + env.name + ')');
 }
 
 electron.app.on('ready', function () {
-    setApplicationMenu();
+	setApplicationMenu();
 
-    var mainWindow = createWindow('main', {
-        width: 1000,
-        height: 600,
-        transparent: true,
-        titleBarStyle: 'hidden'
-    });
+	var mainWindow = createWindow('main', {
+		width: 1000,
+		height: 600,
+		transparent: true,
+		titleBarStyle: 'hidden',
+		webPreferences: {
+			experimentalFeatures: true,
+		}
+	});
 
-    mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
-
-    // if (env.name === 'development') {
-    //     mainWindow.openDevTools();
-    // }
+	electronVibrancy.SetVibrancy(mainWindow, 2);
+	mainWindow.loadURL(url.format({
+		pathname: path.join(__dirname, 'index.html'),
+		protocol: 'file:',
+		slashes: true
+	}));
+	// if (env.name === 'development') {
+	//     mainWindow.openDevTools();
+	// }
 });
 
 electron.app.on('window-all-closed', function () {
-    electron.app.quit();
+	electron.app.quit();
 });
 
 }());

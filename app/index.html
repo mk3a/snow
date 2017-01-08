@@ -1,16 +1,21 @@
 <!doctype html>
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <title>Electron Boilerplate Test</title>
-
-    <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
-
-    <script src="helpers/context_menu.js"></script>
-    <script src="helpers/external_links.js"></script>
-
+	<meta charset="utf-8">
+	<title>Electron Boilerplate Test</title>
+	<link href="stylesheets/main.css" rel="stylesheet" type="text/css">
+	<script src="JS/angular.min.js"></script>
+	<script src="helpers/context_menu.js"></script>
+	<script src="helpers/external_links.js"></script>
 </head>
-<body>
-    <div id="title_bar">SNOW</div>
+
+<body ng-app>
+	<div id="title_bar">SNOW</div>
+	<div id="codeBox" contenteditable="true">
+		int <span style="color:blue;">main</span>( char* <span style="color:blue;">args</span>) { return <span style="color:blue;">-1</span>;
+		}
+	</div>
 </body>
+
 </html>
