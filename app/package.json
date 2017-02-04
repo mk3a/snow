@@ -9,6 +9,7 @@
   "author": "Mohammed Khairul Islam",
   "license": "MIT",
   "dependencies": {
-    "angular": "^1.6.1"
+    "angular": "^1.6.1",
+    "jquery": "^3.1.1"
   }
 }

@@ -174,9 +174,9 @@ electron.app.on('ready', function () {
 		protocol: 'file:',
 		slashes: true
 	}));
-	// if (env.name === 'development') {
-	//     mainWindow.openDevTools();
-	// }
+	if (env.name === 'development') {
+		mainWindow.openDevTools();
+	}
 });
 
 electron.app.on('window-all-closed', function () {

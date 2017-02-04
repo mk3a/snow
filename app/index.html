@@ -5,17 +5,17 @@
 	<meta charset="utf-8">
 	<title>Electron Boilerplate Test</title>
 	<link href="stylesheets/main.css" rel="stylesheet" type="text/css">
-	<script src="assets/angular.min.js"></script>
+	<!--<script src="assets/angular.min.js"></script>-->
 	<script src="helpers/context_menu.js"></script>
 	<script src="helpers/external_links.js"></script>
-	<script src="assets/main.js"></script>
-	<script src="codeEditor/codeEditorDirective.js"></script>
-	<script src="codeEditor/codeEditorController.js"></script>
+	<script src="assets/bundledMain.js"></script>
 </head>
 
 <body ng-app="snow">
 	<div id="title_bar">SNOW</div>
-	<div id="codeBox" contenteditable="true" ng-model="code" ng-controller="CodeEditorController" code-full>
+	<div id="codeBox" contenteditable="true" ng-model="code" ng-controller="codeEditorController" code-editor ng-click="test()">
+		<div>
+		</div>
 	</div>
 </body>
 

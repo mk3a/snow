@@ -8,17 +8,18 @@ var plumber = require('gulp-plumber');
 var jetpack = require('fs-jetpack');
 var bundle = require('./bundle');
 var utils = require('./utils');
-
+var browserify = require('browserify');
 var projectDir = jetpack;
 var srcDir = jetpack.cwd('./src');
 var destDir = jetpack.cwd('./app');
+var source = require('vinyl-source-stream');
 
 gulp.task('bundle', function () {
 	return Promise.all([
-		bundle(srcDir.path('background.js'), destDir.path('background.js')),
 		projectDir.copy('./src', './app', {
 			overwrite: true
-		})
+		}),
+		bundle(srcDir.path('background.js'), destDir.path('background.js')),
 	]);
 });
 
@@ -27,6 +28,16 @@ gulp.task('less', function () {
 		.pipe(plumber())
 		.pipe(less())
 		.pipe(gulp.dest(destDir.path('stylesheets')));
+});
+
+gulp.task('browserify', function () {
+	return browserify({
+			entries: './src/assets/main.js',
+			debug: true
+		})
+		.bundle()
+		.pipe(source('bundledMain.js'))
+		.pipe(gulp.dest('./app/assets/'));
 });
 
 gulp.task('environment', function () {
@@ -54,4 +65,4 @@ gulp.task('watch', function () {
 	}));
 });
 
-gulp.task('build', ['bundle', 'less', 'environment']);
+gulp.task('build', ['bundle', 'browserify', 'less', 'environment']);
