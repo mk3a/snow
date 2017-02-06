@@ -58,3 +58,9 @@ a {
 .subtitle {
   color: gray;
 }
+.tab {
+  white-space: pre;
+}
+.space {
+  white-space: pre;
+}

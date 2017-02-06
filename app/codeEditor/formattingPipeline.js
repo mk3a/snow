@@ -7,7 +7,8 @@ var formattingPipelineStages = {
 
 	renderTokensIntoHTMLElements: tokens => tokens.map(token => token.getHtmlRenderedElement()),
 
-	concatenateHTMLElements: elements => elements.reduce((accumulator, currentElem) => accumulator.add(currentElem), $())
+	concatenateHTMLElements: elements => elements.reduce((accumulator, currentElem) => accumulator.add(currentElem), $()),
+
+	createPipeline: () => [splitStringIntoTokens, renderTokensIntoHTMLElements, concatenateHTMLElements]
 }
-var formattingPipeline = [formattingPipelineStages.concatenateHTMLElements, formattingPipelineStages.renderTokensIntoHTMLElements, formattingPipelineStages.splitStringIntoTokens]
-module.exports = formattingPipeline;
+module.exports = formattingPipelineStages;

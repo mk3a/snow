@@ -2,9 +2,6 @@
 var angular = require('angular');
 
 module.exports = function CodeEditorController($scope) {
-	$scope.code = "";
-	$scope.code = "abc def ghi jkl mno 123 @#$ \"!'~` +-()"
-	$scope.test = function () {
-		console.log("got here");
-	}
+	$scope.code = "\nabc<b>M</b>.'\" END1\nLINE2\nLINE3\n\n\nLINE5\n     \nLIN\tE6\n\t\nLINE7ENDTES\n\n";
+
 }

@@ -1,23 +1,14 @@
 "use strict";
 var angular = require('angular');
 var $ = require('jquery')
-var formattingPipeline = require('./formattingPipeline');
+var formatLinesPipeline = require('./formatLinesPipeline.js');
 module.exports = function () {
-	function makeIntsBold(pureCodeString) {
-		return pureCodeString.replace(/in/g, "<b>in</b>");
-	}
-
-	function filterBold(formattedCode) {
-		return formattedCode.replace(/<b>|<\/b>/g, "");
-	}
 	return {
 		require: 'ngModel',
 		link: function (scope, elem, attrs, mdlCtrlr) {
 			mdlCtrlr.$render = function () {
-				/*Commenting next line for Unit Testing HTML Render Tokenizer*/
-				//elem.html(mdlCtrlr.$viewValue); //Inject Html String as Html into Div
-				var singleLineDOM = $("<div></div>").append(mdlCtrlr.$viewValue);
-				elem.append(singleLineDOM);
+				// var singleLineDOM = $("<div></div>").append(mdlCtrlr.$viewValue);
+				elem.append(mdlCtrlr.$viewValue);
 			}
 			elem.on('keyup blur paste', function () {
 				/* Disabling this as currently only working on one way Model to View*/
@@ -45,9 +36,7 @@ module.exports = function () {
 			scope.$watch("code", function (newValue, oldValue) {
 				if (newValue != oldValue) runFormatters(mdlCtrlr);
 			});
-			mdlCtrlr.$formatters = formattingPipeline;
-			mdlCtrlr.$parsers.push(filterBold);
-			// elem.on('blur keyup paste', )
+			mdlCtrlr.$formatters = formatLinesPipeline.reversePipeline() //Angular expects formatters in reverse array order
 		}
 
 	}
