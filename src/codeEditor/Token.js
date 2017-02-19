@@ -1,8 +1,9 @@
 "use strict";
 var $ = require('jquery');
+var validKinds = ["COMMENT"];
 class Token {
-
 	constructor(lexeme, kind, cssClasses = []) {
+		console.log(validKinds.includes(kind));
 		this.lexeme = lexeme;
 		this.kind = kind;
 		this.classes = cssClasses;
