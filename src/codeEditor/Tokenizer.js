@@ -19,20 +19,24 @@ var regexBlocks = new Map([
 var Tokenizer = {
 
 }
-
+//Ex: Replaces {D}+ with [0-9]+
 function replaceRegexBlobs(patternString) {
   var regexBlobs = new Map([
     ["D", "[0-9]"],
     ["L", "[a-zA-Z_]"],
     ["H", "[a-fA-F0-9]"],
-    ["E", "[Ee][+-]?{D}+"],
-    ["P", "[Pp][+-]?{D}+"],
+    ["E", "[Ee][+-]?[0-9]+"],
+    ["P", "[Pp][+-]?[0-9]+"],
     ["FS", "(f|F|l|L)"],
     ["IS", "((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))"]
   ]);
-
-
+  for (var [key, value] of regexBlobs) {
+    var regex = new RegExp("{" + key + "}", "g");
+    patternString = patternString.replace(regex, value);
+  }
+  return patternString;
 }
+
 function getFirstRegexMatch(patternString, input) {
   var regexPattern = new RegExp("^" + patternString);
   var matches = input.match(regexPattern);
@@ -111,7 +115,14 @@ function generateKeywords(input) {
 }
 
 function generateIdentifier(input) {
-
+  var identifierRegex = replaceRegexBlobs("{L}({L}|{D})*");
+  var match = getFirstRegexMatch(identifierRegex, input);
+  if (match) {
+    return new Token(match, "IDENTIFIER");
+  }
+  else {
+    throw ("Unable to generate identifier out of input.");
+  }
 }
 
 //TODO : make tryEach return an array of tokens and pick largest in generateSingleToken
@@ -130,7 +141,7 @@ function tryEach(functions, input) {
 
 function generateSingleToken(input) {
   try {
-    return tryEach([generateComment, generateKeywords], input);
+    return tryEach([generateComment, generateKeywords, generateIdentifier], input);
   }
   catch (ex) {
     console.log(ex);
