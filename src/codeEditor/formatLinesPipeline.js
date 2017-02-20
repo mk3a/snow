@@ -36,6 +36,7 @@ var formatLinePipeline = new Pipeline([splitLineIntoTokens, renderTokensIntoHTML
 /*
 Beginning of Multiple Line Pipeline functions
 */
+//TODO: Splitting by lines needs to be careful about \n as \n can be inside string.
 var splitStringIntoLines = string => string.split('\n');
 var renderLinesIntoHTMLDivs = lines => lines.map(line => formatLinePipeline.passValThrough(line));
 var formatLinesPipeline = new Pipeline([splitStringIntoLines, renderLinesIntoHTMLDivs, concatenateHTMLElements]);
