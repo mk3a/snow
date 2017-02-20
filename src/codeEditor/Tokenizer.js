@@ -261,12 +261,17 @@ function tryEach(functions, input) {
   return returnValues;
 }
 
-//For now returns array of tokens for testing. TODO: make it return longest token only. 
 function generateSingleToken(input) {
   try {
-    return tryEach(
-      [generateComment, generateKeywords, generateIdentifier, generateIntCnst, generateFloatCnst, generateStringLiteral, generateOperator, generateSpecialChar
-      ], input);
+    var tokenMatches = tryEach([
+      generateComment, generateKeywords, generateIdentifier, generateIntCnst,
+      generateFloatCnst, generateStringLiteral, generateOperator, generateSpecialChar
+    ], input);
+    var longestToken = tokenMatches[0];
+    for (let token of tokenMatches) {
+      if (token.lexeme.length > longestToken.lexeme.length) longestToken = token;
+    }
+    return longestToken;
   }
   catch (ex) {
     console.log(ex);
