@@ -125,29 +125,174 @@ function generateIdentifier(input) {
   }
 }
 
-//TODO : make tryEach return an array of tokens and pick largest in generateSingleToken
-function tryEach(functions, input) {
-  for (let [index, fnct] of functions.entries()) {
-    try {
-      var returnValue = fnct(input);
-      return returnValue;
+function generateIntCnst(input) {
+  var intPatterns = [
+    "0[xX]{H}+{IS}?",
+    "0{D}+{IS}?",
+    "{D}+{IS}?",
+    "L?'(\\.|[^\\'\n])+'"
+  ];
+  var matches = [];
+  for (var pattern of intPatterns.map(replaceRegexBlobs)) {
+    let match = getFirstRegexMatch(pattern, input);
+    if (match) matches.push(match);
+  }
+  if (matches.length > 0) {
+    //Return longest matches
+    var longestMatch = matches[0];
+    for (let match of matches) {
+      if (match.length > longestMatch.length) longestMatch = match;
     }
-    catch (ex) {
-      console.log(ex);
-      if (index == (functions.length - 1)) throw ("None of the functions succeeded");
-    }
+    return new Token(longestMatch, "INT");
+  }
+  else {
+    throw ("Unable to generate Int Constant out of input.");
   }
 }
 
+function generateFloatCnst(input) {
+  var floatPatterns = [
+    '{D}+{E}{FS}?',
+    '{D}*\.{D}+({E})?{FS}?',
+    '{D}+\.{D}*({E})?{FS}?',
+    '0[xX]{H}+{P}{FS}?',
+    '0[xX]{H}*\.{H}+({P})?{FS}?',
+    '0[xX]{H}+\.{H}*({P})?{FS}?',
+  ];
+  var matches = [];
+  for (var pattern of floatPatterns.map(replaceRegexBlobs)) {
+    let match = getFirstRegexMatch(pattern, input);
+    if (match) matches.push(match);
+  }
+  if (matches.length > 0) {
+    //Return longest matches
+    var longestMatch = matches[0];
+    for (let match of matches) {
+      if (match.length > longestMatch.length) longestMatch = match;
+    }
+    return new Token(longestMatch, "FLOAT");
+  }
+  else {
+    throw ("Unable to generate Float Constant out of input.");
+  }
+}
+
+function generateStringLiteral(input) {
+  var stringRegex = 'L?"(\\.|[^"])*"';
+  var match = getFirstRegexMatch(stringRegex, input);
+  if (match) {
+    return new Token(match, "STRING");
+  }
+  else {
+    throw ("Unable to generate string literal out of input.");
+  }
+}
+
+function generateOperator(input) {
+  var keyWordToKind = new Map([
+    ["...", "ELLIPSIS"],
+    [">>=", "RIGHT_ASSIGN"],
+    ["<<=", "LEFT_ASSIGN"],
+    ["+=", "ADD_ASSIGN"],
+    ["-=", "SUB_ASSIGN"],
+    ["*=", "MUL_ASSIGN"],
+    ["/=", "DIV_ASSIGN"],
+    ["%=", "MOD_ASSIGN"],
+    ["&=", "AND_ASSIGN"],
+    ["^=", "XOR_ASSIGN"],
+    ["|=", "OR_ASSIGN"],
+    [">>", "RIGHT_OP"],
+    ["<<", "LEFT_OP"],
+    ["++", "INC_OP"],
+    ["--", "DEC_OP"],
+    ["->", "PTR_OP"],
+    ["&&", "AND_OP"],
+    ["||", "OR_OP"],
+    ["<=", "LE_OP"],
+    [">=", "GE_OP"],
+    ["==", "EQ_OP"],
+    ["!=", "NE_OP"]
+  ]);
+  var token = null;
+  for (var [key, value] of keyWordToKind) {
+    if (input.startsWith(key)) {
+      token = new Token(key, value);
+      break;
+    }
+  }
+  if (token) return token;
+  else throw ("Unable to generate operators out of input.");
+}
+
+function generateSpecialChar(input) {
+  var keyWordToKind = new Map([
+    [";", ";"],
+    ["{", "{"],
+    ["<%", "{"],
+    ["}", "}"],
+    ["%>", "}"],
+    [",", ","],
+    [":", ":"],
+    ["=", "="],
+    ["(", "("],
+    [")", ")"],
+    ["[", "["],
+    ["<:", "["],
+    ["]", "]"],
+    [":>", "]"],
+    [".", "."],
+    ["&", "&"],
+    ["!", "!"],
+    ["~", "~"],
+    ["-", "-"],
+    ["+", "+"],
+    ["*", "*"],
+    ["/", "/"],
+    ["%", "%"],
+    ["<", "<"],
+    [">", ">"],
+    ["^", "^"],
+    ["|", "|"],
+    ["?", "?"],
+  ]);
+  var token = null;
+  for (var [key, value] of keyWordToKind) {
+    if (input.startsWith(key)) {
+      token = new Token(key, value);
+      break;
+    }
+  }
+  if (token) return token;
+  else throw ("Unable to generate special chars out of input.");
+}
+//TODO : make tryEach return an array of tokens and pick largest in generateSingleToken
+function tryEach(functions, input) {
+  var returnValues = []
+  for (let [index, fnct] of functions.entries()) {
+    try {
+      var returnValue = fnct(input);
+      console.log("Successfully Generated token:", returnValue);
+      returnValues.push(returnValue);
+    }
+    catch (ex) {
+      console.log(ex);
+      if (index === (functions.length - 1) && returnValues.length === 0) throw ("None of the functions succeeded");
+    }
+  }
+  return returnValues;
+}
+
+//For now returns array of tokens for testing. TODO: make it return longest token only. 
 function generateSingleToken(input) {
   try {
-    return tryEach([generateComment, generateKeywords, generateIdentifier], input);
+    return tryEach(
+      [generateComment, generateKeywords, generateIdentifier, generateIntCnst, generateFloatCnst, generateStringLiteral, generateOperator, generateSpecialChar
+      ], input);
   }
   catch (ex) {
     console.log(ex);
   }
 }
-
 function consumeSingleToken(token, input) {
   var beginningLexeme = token.getLexeme();
   //Cut off the lexeme and return the remaining part
