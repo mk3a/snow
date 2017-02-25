@@ -15,10 +15,13 @@ class Token {
 		return this.lexeme;
 	}
 	getKind() {
-		return this.kind
+		return this.kind;
 	}
 	getClassesString() {
 		return this.classes.join(" ");
+	}
+	isNewLine() {
+		return this.getKind() === "NEWLINE";
 	}
 	getHtmlRenderedElement() {
 		var htmlElementAttrs = {

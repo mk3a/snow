@@ -1,8 +1,9 @@
 "use strict";
 var $ = require('jquery');
+var validKinds = ["COMMENT"];
 class Token {
-
 	constructor(lexeme, kind, cssClasses = []) {
+		console.log(validKinds.includes(kind));
 		this.lexeme = lexeme;
 		this.kind = kind;
 		this.classes = cssClasses;
@@ -14,10 +15,13 @@ class Token {
 		return this.lexeme;
 	}
 	getKind() {
-		return this.kind
+		return this.kind;
 	}
 	getClassesString() {
 		return this.classes.join(" ");
+	}
+	isNewLine() {
+		return this.getKind() === "NEWLINE";
 	}
 	getHtmlRenderedElement() {
 		var htmlElementAttrs = {
