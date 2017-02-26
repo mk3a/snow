@@ -33,6 +33,7 @@ var splitStringIntoTokens = inputString => {
 //Categorys can then be styled in CSS. This allows full styling flexibility in css which is good practice.
 var addStyleToTokens = tokens => tokens.map(token => {
 	token.addClass(token.getCategory());
+	token.addClass(token.getKind());
 	return token;
 });
 var addBlankTokens = tokens => {

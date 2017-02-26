@@ -1,6 +1,21 @@
 .COMMENT {
   color: green;
 }
+.CONSTANT {
+  color: #c61aff;
+}
+.IDENTIFIER {
+  color: #ff0000;
+}
+.KEYWORD {
+  color: #33adff;
+}
+.PRE_PROCESSOR {
+  color: #b3b3cc;
+}
+.STRING {
+  color: #ffcc00;
+}
 html,
 body {
   width: 100%;
