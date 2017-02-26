@@ -29,7 +29,12 @@ var splitLineIntoTokens = line => {
 	var blankToken = new Token("", "BLANK");
 	if (line === "") return [blankToken];
 	else return lexer.generateTokens(line);
-}
+};
+//Categorys can then be styled in CSS. This allows full styling flexibility in css which is good practice.
+var addStyleToTokens = tokens => tokens.map(token => {
+	token.addClass(token.getCategory());
+	return token;
+});
 
 var renderTokensIntoHTMLElements = tokens => tokens.map(token => token.getHtmlRenderedElement());
 
@@ -37,7 +42,7 @@ var concatenateHTMLElements = elements => elements.reduce((accumulator, currentE
 
 var surroundHTMLElemWithDiv = element => $('<div></div>').append(element);
 
-var formatLinePipeline = new Pipeline([splitLineIntoTokens, renderTokensIntoHTMLElements, concatenateHTMLElements, surroundHTMLElemWithDiv]);
+var formatLinePipeline = new Pipeline([splitLineIntoTokens, addStyleToTokens, renderTokensIntoHTMLElements, concatenateHTMLElements, surroundHTMLElemWithDiv]);
 
 /*
 Beginning of Multiple Line Pipeline functions

@@ -28,7 +28,7 @@ function getFirstRegexMatch(patternString, input) {
 function generatePreProcessor(input) {
     var singleLinePP = getFirstRegexMatch("#[^\n]*", input);
     if (singleLinePP) {
-        token = new Token(singleLinePP, "PRE_PROCESSOR");
+        token = new Token(singleLinePP, "PRE_PROCESSOR", "PRE_PROCESSOR");
         return token;
     }
     else {
@@ -40,12 +40,12 @@ function generateComment(input) {
     if (input.startsWith("/*")) {
         var commentEndIndex = input.search(/\*\//g);
         var multiLinecomment = (commentEndIndex >= 0) ? input.substring(0, commentEndIndex + 2) : input;
-        token = new Token(multiLinecomment, "COMMENT");
+        token = new Token(multiLinecomment, "COMMENT", "COMMENT");
         return token;
     }
     else if (getFirstRegexMatch("\/\/[^\n]*", input)) {
         var singleLineComment = getFirstRegexMatch("\/\/[^\n]*", input);
-        token = new Token(singleLineComment, "COMMENT");
+        token = new Token(singleLineComment, "COMMENT", "COMMENT");
         return token;
     }
     else {
@@ -96,7 +96,7 @@ function generateKeywords(input) {
     var token = null;
     for (var [key, value] of keyWordToKind) {
         if (input.startsWith(key)) {
-            token = new Token(key, value);
+            token = new Token(key, value, "KEYWORD");
             break;
         }
     }
@@ -108,7 +108,7 @@ function generateIdentifier(input) {
     var identifierRegex = replaceRegexBlobs("{L}({L}|{D})*");
     var match = getFirstRegexMatch(identifierRegex, input);
     if (match) {
-        return new Token(match, "IDENTIFIER");
+        return new Token(match, "IDENTIFIER", "IDENTIFIER");
     }
     else {
         throw ("Unable to generate identifier out of input.");
@@ -133,7 +133,7 @@ function generateIntCnst(input) {
         for (let match of matches) {
             if (match.length > longestMatch.length) longestMatch = match;
         }
-        return new Token(longestMatch, "INT");
+        return new Token(longestMatch, "INT", "CONSTANT");
     }
     else {
         throw ("Unable to generate Int Constant out of input.");
@@ -160,7 +160,7 @@ function generateFloatCnst(input) {
         for (let match of matches) {
             if (match.length > longestMatch.length) longestMatch = match;
         }
-        return new Token(longestMatch, "FLOAT");
+        return new Token(longestMatch, "FLOAT", "CONSTANT");
     }
     else {
         throw ("Unable to generate Float Constant out of input.");
@@ -171,7 +171,7 @@ function generateStringLiteral(input) {
     var stringRegex = 'L?"(\\.|[^"])*"';
     var match = getFirstRegexMatch(stringRegex, input);
     if (match) {
-        return new Token(match, "STRING");
+        return new Token(match, "STRING", "CONSTANT");
     }
     else {
         throw ("Unable to generate string literal out of input.");
@@ -206,7 +206,7 @@ function generateOperator(input) {
     var token = null;
     for (var [key, value] of keyWordToKind) {
         if (input.startsWith(key)) {
-            token = new Token(key, value);
+            token = new Token(key, value, "OPERATOR");
             break;
         }
     }
@@ -248,7 +248,7 @@ function generateSpecialChar(input) {
     var token = null;
     for (var [key, value] of keyWordToKind) {
         if (input.startsWith(key)) {
-            token = new Token(key, value);
+            token = new Token(key, value, "SYMBOL");
             break;
         }
     }
@@ -265,11 +265,11 @@ function generateWhiteSpace(input) {
     ]);
     var spacesRegex = replaceRegexBlobs("[ ]+");
     var match = getFirstRegexMatch(spacesRegex, input);
-    if (match) return new Token(match, "SPACES");
+    if (match) return new Token(match, "SPACES", "WHITESPACE");
     var token = null;
     for (var [key, value] of whiteSpaceToKind) {
         if (input.startsWith(key)) {
-            token = new Token(key, value);
+            token = new Token(key, value, "WHITESPACE");
             break;
         }
     }
@@ -307,6 +307,7 @@ function generateSingleToken(input) {
     }
     catch (ex) {
         console.log(ex);
+        throw (ex);
     }
 }
 function consumeSingleToken(token, input) {
@@ -331,7 +332,7 @@ function generateTokens(input, accumulator = []) {
             token = generateSingleToken(input);
         }
         catch (ex) {
-            token = new Token(input, "UNMATCHED");
+            token = new Token(input, "UNMATCHED", "UNMATCHED");
         }
         var newInput = consumeSingleToken(token, input);
         accumulator.push(token);

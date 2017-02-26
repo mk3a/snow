@@ -1,11 +1,12 @@
 "use strict";
 var $ = require('jquery');
-var validKinds = ["COMMENT"];
+var validKinds = require('./validTokenKinds.js');
 class Token {
-	constructor(lexeme, kind, cssClasses = []) {
-		console.log(validKinds.includes(kind));
+	constructor(lexeme, kind, category, cssClasses = []) {
+		// console.assert(validKinds.includes(kind));
 		this.lexeme = lexeme;
 		this.kind = kind;
+		this.category = category;
 		this.classes = cssClasses;
 	}
 	addClass(className) {
@@ -15,7 +16,10 @@ class Token {
 		return this.lexeme;
 	}
 	getKind() {
-		return this.kind;
+		return this.kind
+	}
+	getCategory() {
+		return this.category;
 	}
 	getClassesString() {
 		return this.classes.join(" ");
