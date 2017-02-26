@@ -1,3 +1,6 @@
+.COMMENT {
+  color: green;
+}
 html,
 body {
   width: 100%;
