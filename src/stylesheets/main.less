@@ -20,6 +20,8 @@ a {
 }
 
 #title_bar {
+    position: fixed;
+    top: 0;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #ebebeb, color-stop(1.0, #d5d5d5)));
     background: -webkit-linear-gradient(top, #ebebeb, #d5d5d5);
     background: -moz-linear-gradient(top, #ebebeb, #d5d5d5);
@@ -31,7 +33,7 @@ a {
     line-height: 20px;
     text-align: center;
     width: 100%;
-    height: 20px;
+    height: 1.5em;
     border-top: 1px solid #f3f1f3;
     border-bottom: 1px solid #b1aeb1;
     //   border-top-left-radius: 6px;
@@ -61,6 +63,8 @@ a {
     resize: none;
     border: 0 none;
     outline: none;
+    white-space: nowrap;
+    margin-top: 1em;
 }
 
 .blue {
