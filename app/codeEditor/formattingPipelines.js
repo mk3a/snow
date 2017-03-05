@@ -24,12 +24,26 @@ Beginnning of SingleLine Pipeline functions
 // 	var tokens = string.split(',').map(lexeme => generateTokenOutOfLexeme(lexeme));
 // 	return tokens;
 // };
-
+Array.prototype.flatMap = function (lambda) {
+	return Array.prototype.concat.apply([], this.map(lambda));
+};
 var splitStringIntoTokens = inputString => {
 	var blankToken = new Token("", "BLANK");
 	if (inputString === "") return [blankToken];
 	else return lexer.generateTokens(inputString);
 };
+var splitMultiLineComments = tokens => tokens.flatMap(token => {
+	if (token.getKind() === "MULTI_LINE_COMMENT") {
+		var splitStrings = token.getLexeme().match(/(.+)|\n/g);
+		return splitStrings.map(string => {
+			if (string === "\n") return new Token("\n", "NEWLINE", "WHITESPACE");
+			else return new Token(string, "MULTI_LINE_COMMENT", "COMMENT");
+		});
+	}
+	else {
+		return [token];
+	}
+});
 //Categorys can then be styled in CSS. This allows full styling flexibility in css which is good practice.
 var addStyleToTokens = tokens => tokens.map(token => {
 	token.addClass(token.getCategory());
@@ -76,10 +90,10 @@ var formatLinePipeline = new Pipeline([addStyleToTokens, renderTokensIntoHTMLEle
 /*
 Beginning of Multiple Line Pipeline functions
 */
-//TODO: Splitting by lines needs to be careful about \n as \n can be inside string.
-var splitStringIntoLines = string => string.split('\n');
 var renderLinesIntoHTMLDivs = lines => lines.map(line => formatLinePipeline.passValThrough(line));
-var formatLinesPipeline = new Pipeline([splitStringIntoTokens, addBlankTokens, splitAtNewLine,
+var formatLinesPipeline = new Pipeline([splitStringIntoTokens, splitMultiLineComments, addBlankTokens, splitAtNewLine,
 	renderLinesIntoHTMLDivs, concatenateHTMLElements]);
 
-module.exports = formatLinesPipeline;
+module.exports = {
+	codeFormatter: formatLinesPipeline
+}

@@ -40,12 +40,12 @@ function generateComment(input) {
     if (input.startsWith("/*")) {
         var commentEndIndex = input.search(/\*\//g);
         var multiLinecomment = (commentEndIndex >= 0) ? input.substring(0, commentEndIndex + 2) : input;
-        token = new Token(multiLinecomment, "COMMENT", "COMMENT");
+        token = new Token(multiLinecomment, "MULTI_LINE_COMMENT", "COMMENT");
         return token;
     }
     else if (getFirstRegexMatch("\/\/[^\n]*", input)) {
         var singleLineComment = getFirstRegexMatch("\/\/[^\n]*", input);
-        token = new Token(singleLineComment, "COMMENT", "COMMENT");
+        token = new Token(singleLineComment, "SINGLE_LINE_COMMENT", "COMMENT");
         return token;
     }
     else {

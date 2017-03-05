@@ -3,7 +3,7 @@ var $ = require('jquery');
 var validKinds = require('./validTokenKinds.js');
 class Token {
 	constructor(lexeme, kind, category, cssClasses = []) {
-		// console.assert(validKinds.includes(kind));
+		console.assert(validKinds.includes(kind));
 		this.lexeme = lexeme;
 		this.kind = kind;
 		this.category = category;
@@ -16,7 +16,7 @@ class Token {
 		return this.lexeme;
 	}
 	getKind() {
-		return this.kind
+		return this.kind;
 	}
 	getCategory() {
 		return this.category;
@@ -31,7 +31,7 @@ class Token {
 		var htmlElementAttrs = {
 			class: this.getClassesString(),
 			text: this.getLexeme()
-		}
+		};
 		switch (this.getKind()) {
 			case 'TAB':
 				this.addClass("tab");
@@ -39,7 +39,7 @@ class Token {
 				htmlElementAttrs.text = "    " //Currently tab equlas 4 spaces. Will implement json property file to read preferences later.
 				break;
 			case 'NEWLINE':
-				console.error("NEWLINE token should not be rendered.")
+				console.error("NEWLINE token should not be rendered.");
 				break;
 			case 'SPACES':
 				this.addClass("space");

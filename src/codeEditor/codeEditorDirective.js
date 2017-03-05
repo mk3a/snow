@@ -1,7 +1,7 @@
 "use strict";
 var angular = require('angular');
 var $ = require('jquery')
-var formatLinesPipeline = require('./formatLinesPipeline.js');
+var formatLinesPipeline = require('./formattingPipelines.js').codeFormatter;
 module.exports = function () {
 	return {
 		require: 'ngModel',

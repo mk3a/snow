@@ -5,6 +5,8 @@ module.exports = [
     "CASE",
     "CHAR",
     "COMPLEX",
+    "MULTI_LINE_COMMENT",
+    "SINGLE_LINE_COMMENT",
     "CONST",
     "CONTINUE",
     "DEFAULT",
