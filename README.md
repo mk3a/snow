@@ -1,8 +1,8 @@
 # Snow
 A C code editor that has syntax highlighting, tabs, keyboard shortcuts and user customization.
-Custom Coloring Schemes can be used through changing code.less file.
+Custom coloring schemes can be used through changing code.less file.
 
-Check out a GIF Demos at
+Check out GIF Demos at
 * [Hello World Sample](https://gfycat.com/UnkemptGlitteringBoilweevil)
 * [Real Time Lexing Sample](https://gfycat.com/WindyEvenHarvestmen)
 
