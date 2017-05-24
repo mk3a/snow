@@ -4,7 +4,7 @@ Custom Coloring Schemes can be used through changing code.less file.
 
 Check out a GIF Demos at
 * [Hello World Sample](https://gfycat.com/UnkemptGlitteringBoilweevil)
-* [Real Time Lexing Sample)(https://gfycat.com/WindyEvenHarvestmen)
+* [Real Time Lexing Sample](https://gfycat.com/WindyEvenHarvestmen)
 
 Some more static demos.
 ![MultipleTokens](https://cloud.githubusercontent.com/assets/16367953/26403834/abbbc2cc-405d-11e7-884b-60ba5a2bc0ca.png)
